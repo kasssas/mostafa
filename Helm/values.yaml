@@ -310,16 +310,44 @@ userService:
 # -------------------------------------------------------------------
 ingress:
   enabled: true
-  host: purely.com
+  host: "{{ .Values.public_ip }}:30080"  # سيحل مكان public_ip في الـ Ingress
   paths:
     frontend:
-      path: /()(.*)
+      path: /()
       service: frontend
       port: 80
     apiGateway:
       path: /api-gateway(/|$)(.*)
       service: api-gateway
       port: 8080
+    products:
+      path: /products(/|$)(.*)
+      service: product-service
+      port: 9010
+    orders:
+      path: /orders(/|$)(.*)
+      service: order-service
+      port: 9070
+    auth:
+      path: /auth(/|$)(.*)
+      service: auth-service
+      port: 9030
+    cart:
+      path: /cart(/|$)(.*)
+      service: cart-service
+      port: 9060
+    category:
+      path: /category(/|$)(.*)
+      service: category-service
+      port: 9000
+    notification:
+      path: /notification(/|$)(.*)
+      service: notification-service
+      port: 9020
+    user:
+      path: /user(/|$)(.*)
+      service: user-service
+      port: 9050
 
 #---------------------------------------
 # secrets
