@@ -2,26 +2,70 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name:  app-ingress
+  name: app-ingress
   namespace: {{ .Values.namespace }}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - http:
+    - host: "{{ .Values.ingress.host }}"
+      http:
         paths:
-          - path: {{ .Values.ingress.paths.frontend.path }}
-            pathType: ImplementationSpecific
+          - path: /()
+            pathType: Prefix
             backend:
               service:
-                name: {{ .Values.ingress.paths.frontend.service }}
+                name: frontend
                 port:
-                  number: {{ .Values.ingress.paths.frontend.port }}
-          - path: {{ .Values.ingress.paths.apiGateway.path }}
-            pathType: ImplementationSpecific
+                  number: 80
+          - path: /products(/|$)(.*)
+            pathType: Prefix
             backend:
               service:
-                name: {{ .Values.ingress.paths.apiGateway.service }}
+                name: product-service
                 port:
-                  number: {{ .Values.ingress.paths.apiGateway.port }}
+                  number: 9010
+          - path: /orders(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: 9070
+          - path: /auth(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9030
+          - path: /cart(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: cart-service
+                port:
+                  number: 9060
+          - path: /category(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: category-service
+                port:
+                  number: 9000
+          - path: /notification(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: notification-service
+                port:
+                  number: 9020
+          - path: /user(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 9050
+
 {{- end }}
